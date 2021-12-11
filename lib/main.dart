@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+// import 'package:pedantic/pedantic.dart';
 
 import 'package:movie_api/core/api.dart';
 import 'package:movie_api/core/api_constant.dart';
@@ -9,21 +12,14 @@ import 'package:movie_api/repositories/category_repository.dart';
 import 'package:movie_api/service/category_remote_source.dart';
 import 'package:movie_api/use_case/get_category.dart';
 import 'package:movie_api/use_case/no_params.dart';
-
 import 'entities/category_entity.dart';
+import 'package:movie_api/di/get_it.dart' as getIt;
+
 
 Future<void> main() async {
   final String url = "/category/type?category=market";
-
-  Api api = Api(Client());
-  CategoryRemoteSource remoteSource = CategorySourceImpl(api);
-  // remoteSource.getCategoriesList("/category/type?category=market");
-  CategoryRepository categoryRepository = CategoryRepositoryImpl(remoteSource);
-  // categoryRepository.getCategory("/category/type?category=market");
-  GetCategory getCategory = GetCategory(categoryRepository);
-  // getCategory("/category/type?category=market");
-
-  // final Either<ErrorHandle,List<Category>>
+  unawaited(getIt.init());
+  GetCategory getCategory=getIt.getItInstance<GetCategory>();
   final Either<ErrorHandle, List<CategoryEntity>> eitherResponse =
       await getCategory(url, NoParams());
   eitherResponse.fold((l) {
