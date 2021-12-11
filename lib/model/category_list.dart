@@ -4,42 +4,50 @@
 
 import 'dart:convert';
 
+import 'package:movie_api/entities/category_entity.dart';
+
 List<CategoryList> categoryListFromJson(String str) => List<CategoryList>.from(
     json.decode(str).map((x) => CategoryList.fromJson(x)));
 
 String categoryListToJson(List<CategoryList> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class CategoryList {
+class CategoryList extends CategoryEntity {
   CategoryList({
-    this.id,
-    this.path,
+    required this.id,
+    required this.path,
     this.parent,
     this.level,
-    this.title,
-    this.content,
+    required this.title,
+    required this.content,
     this.regionId,
     this.culturId,
     this.guid,
     this.tick,
-    this.categoryType,
+    required this.categoryType,
     this.subList,
-    this.icon,
-  });
+    required this.icon,
+  }) : super(
+            id: id,
+            path: path,
+            title: title,
+            content: content,
+            categoryType: categoryType,
+            icon: icon);
 
-  int? id;
-  String? path;
+  int id;
+  String path;
   int? parent;
   int? level;
-  String? title;
-  String? content;
+  String title;
+  String content;
   int? regionId;
   int? culturId;
   String? guid;
   double? tick;
-  int? categoryType;
+  int categoryType;
   List<CategoryList>? subList;
-  String? icon;
+  String icon;
 
   factory CategoryList.fromJson(Map<String, dynamic> json) {
     return CategoryList(
